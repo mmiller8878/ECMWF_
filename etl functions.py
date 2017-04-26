@@ -1,4 +1,4 @@
-
+import pygrib
 
 def ETL_based_upon_forecast_type():
     '''looks at the name of the forecast and redirects to appropriate ETL based upon this'''
@@ -9,3 +9,7 @@ def create_string_for_location():
 def ETL_to_table():
     '''takes all the forecasts produced at a specific timepoint and ETLs them into the same table'''
 
+grbs = pygrib.open('/home/ecmwf/D1D03160000031718001')
+
+for grb in grbs:
+    print(grb)
