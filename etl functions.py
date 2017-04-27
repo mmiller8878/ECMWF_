@@ -9,7 +9,8 @@ def create_string_for_location():
 def ETL_to_table():
     '''takes all the forecasts produced at a specific timepoint and ETLs them into the same table'''
 
-grbs = pygrib.open('/home/ecmwf/D1D03160000031718001')
+def convert_latlongpoint_to_gridcorners():
+    '''converts latlongs specifying the centre of the grid to specifying each corner of the grid'''
 
-for grb in grbs:
-    print(grb)
+def get_URI():
+    ''''''
