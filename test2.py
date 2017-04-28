@@ -17,8 +17,6 @@ def list_file_params():
     #grbs = pygrib.open('/home/ecmwf/D1L0401000004______1')
     print(grbs)
     print(grbs.readline())
-    #for i in grbs:
-        #print(i)
 
 
 def list_all_files_in_dir():
@@ -34,19 +32,24 @@ def list_all_files_in_dir():
 
 def get_spatial_resolution1():
     grbs = pygrib.open('/home/ecmwf/D1D03180000032103001')
-    latlons = grbs[1]['latLonValues']
-    np.savetxt('latlonvals',latlons,delimiter=',')
+    latlons = map(str,grbs[1]['latLonValues'])
+    for i in latlons: print(i)
+    #np.savetxt('latlonvals',latlons)
+
 
 def get_spatial_resolution():
-    for i in ('/home/ecmwf/D1D03170000032118001','/home/ecmwf/D1E04100000042100001','/home/ecmwf/D1H041000000430____1','/home/ecmwf/D1L0401000007______1'):
+    for i in ('/home/ecmwf/D1E04100000042100001','/home/ecmwf/D1H041000000430____1','/home/ecmwf/D1L0401000007______1','/home/ecmwf/D1D03170000032118001'):
+        n=0
         grbs = pygrib.open(i)
         print(grbs)
         i=grbs[1]
-        print(i['latLonValues'][1000:1003])
-        #for i in grbs.keys():
-          #  latlons = grbs['latLonValues']
-          #  print(latlons)
-            #np.savetxt(i, latlons, delimiter=',')
+        a = map(lambda x:np.round(x,decimals=2),i['latLonValues'][999:1010])
+        print(timerange_keys[i['unitOfTimeRange']])
+        print(i['P1'])
+        print(i['P2'])
+        #print(list(a))
+        n=n+1
+
 
 
 def count_files():
@@ -59,15 +62,27 @@ def count_files():
 
     print(n)
 
+timerange_keys = {0:'Minute',
+                  1:'Hour',
+                  2:'Day',
+                  3:'Month',
+                  4:'Year',
+                  5:'10 years',
+                  10:'3 hours',
+                  11:'6 hours',
+                  12:'12 hours',
+                  13:'Second'}
 
 def HRES_ETL():
     '''test ETL for just the HRES forecast'''
+    data = pd.DataFrame(columns=['Obs_date','GRID_URI','Frequency','Obs_value'])
     for filename in os.listdir(filedir):
-        if 'D1D031600000316' in filename:
+        if 'D1D03160000031603001' in filename:
             try:
                 gribfile = pygrib.open(filedir + filename)
                 for parameter in gribfile:
-                    print(parameter['jDirectionIncrementInDegrees'])
+                    print(timerange_keys[parameter['unitOfTimeRange']])
+
 
             except OSError:
                 pass
